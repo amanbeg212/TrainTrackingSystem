@@ -27,8 +27,25 @@ export function useTrainSearch(query: string) {
         }
       } catch (err: any) {
         if (isMounted) {
-          setError(err.message || 'Failed to search trains');
-          setResults([]);
+          // If backend is down but the query looks like a valid train number,
+          // return a placeholder so the user can still navigate to the journey page.
+          const rawDigits = trimmed.replace(/\D/g, '');
+          if (rawDigits.length >= 4 && rawDigits.length <= 5 && /^\d+$/.test(trimmed)) {
+            setResults([{
+              id: rawDigits,
+              number: rawDigits,
+              name: `Train #${rawDigits}`,
+              type: 'Express',
+              origin: { code: '?', name: 'Loading schedule...', latitude: 20.5937, longitude: 78.9629 },
+              destination: { code: '?', name: 'Loading schedule...', latitude: 20.5937, longitude: 78.9629 },
+              totalDistanceKm: 0,
+              runsOnDays: ['Daily'],
+            }]);
+            setError(null);
+          } else {
+            setError(err.message || 'Failed to search trains');
+            setResults([]);
+          }
         }
       } finally {
         if (isMounted) {

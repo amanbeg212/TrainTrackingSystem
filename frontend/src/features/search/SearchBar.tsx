@@ -152,20 +152,25 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSelectTrain }) => {
             </div>
           ) : (
             <div className="p-6 text-center text-slate-500 text-sm font-medium space-y-2">
-              <div>No direct catalog match for &quot;{query}&quot;.</div>
               {hasValidDigits ? (
-                <button
-                  type="button"
-                  onClick={() => handleSearchSubmit()}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs"
-                >
-                  <Radio className="w-3.5 h-3.5 text-emerald-300 animate-pulse" />
-                  <span>Track Train #{rawDigits} Directly</span>
-                </button>
+                <>
+                  <div className="text-xs text-slate-400">Train #{rawDigits} not found in catalog — track it directly.</div>
+                  <button
+                    type="button"
+                    onClick={() => handleSearchSubmit()}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs"
+                  >
+                    <Radio className="w-3.5 h-3.5 text-emerald-300 animate-pulse" />
+                    <span>Track Train #{rawDigits} Directly</span>
+                  </button>
+                </>
               ) : (
-                <p className="text-xs text-slate-400">
-                  Try searching by train number (e.g. <strong>12951</strong>) or name (e.g. <strong>Rajdhani</strong>, <strong>Shatabdi</strong>).
-                </p>
+                <>
+                  <div>No results for &quot;{query}&quot;.</div>
+                  <p className="text-xs text-slate-400">
+                    Try searching by train number (e.g. <strong>12951</strong>) or name (e.g. <strong>Rajdhani</strong>, <strong>Shatabdi</strong>).
+                  </p>
+                </>
               )}
             </div>
           )}
